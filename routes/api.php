@@ -3,10 +3,6 @@
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 // Rute untuk mendapatkan daftar pengguna (GET)
 Route::get('/users', [UsersController::class, 'index']);
 
