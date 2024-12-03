@@ -10,7 +10,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
 // Rute untuk mendapatkan daftar pengguna (GET)
 Route::get('/users', [UsersController::class, 'index']);
 

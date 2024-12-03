@@ -77,7 +77,7 @@ class QuizController extends Controller
         // Kembalikan respons
         return response()->json([
             'message' => 'Pertanyaan berhasil ditambahkan',
-            'quiz' => $quiz,
+            'kuis' => $quiz,
         ], 200); // Status HTTP 200 OK
     }
 
