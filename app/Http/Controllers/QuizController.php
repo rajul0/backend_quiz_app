@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Quiz;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
-
-
 
     public function index()
     {
@@ -81,9 +80,38 @@ class QuizController extends Controller
         ], 200); // Status HTTP 200 OK
     }
 
-    public function destroy(Quiz $quiz)
+    public function getPertanyaanByQuizId($id)
     {
-        $quiz->delete();
-        return response()->json(null, 204);
+        // Cari quiz berdasarkan ID
+        $quiz = Quiz::find($id);
+
+        if (!$quiz) {
+            return response()->json([
+                'message' => 'Quiz tidak ditemukan',
+            ], 404); // Status HTTP 404 Not Found
+        }
+
+        // Ambil daftar pertanyaan
+        $daftarPertanyaan = $quiz->daftar_pertanyaan ?? [];
+
+        return response()->json([
+            'id' => $quiz->id,
+            'nama' => $quiz->nama,
+            'daftar_pertanyaan' => $daftarPertanyaan,
+        ], 200); // Status HTTP 200 OK
+    }
+
+
+    public function destroy($id)
+    {
+        try {
+            $quiz = Quiz::findOrFail($id); // Cari kuis berdasarkan ID
+            $quiz->delete(); // Hapus kuis
+            return response()->json(['message' => 'Kuis berhasil dihapus'], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['error' => 'Kuis tidak ditemukan'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Terjadi kesalahan saat menghapus kuis'], 500);
+        }
     }
 }

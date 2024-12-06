@@ -30,3 +30,5 @@ Route::get('/kuis', [QuizController::class, 'index']);
 
 Route::post('/kuis/buatKuis', [QuizController::class, 'buatKuis']);
 Route::put('/kuis/{id}/tambahPertanyaan', [QuizController::class, 'tambahPertanyaan']);
+Route::get('/kuis/{id}/pertanyaan', [QuizController::class, 'getPertanyaanByQuizId']);
+Route::delete('/kuis/hapusKuis/{id}', [QuizController::class, 'destroy']);
