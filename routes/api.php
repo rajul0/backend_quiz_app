@@ -27,6 +27,7 @@ Route::delete('/users/{id}', [UsersController::class, 'destroy']);
 
 // Rute untuk Kuis
 Route::get('/kuis', [QuizController::class, 'index']);
+Route::get('/kuis/{id}', [QuizController::class, 'getQuizById']);
 
 Route::post('/kuis/buatKuis', [QuizController::class, 'buatKuis']);
 Route::put('/kuis/{id}/tambahPertanyaan', [QuizController::class, 'tambahPertanyaan']);

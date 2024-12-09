@@ -21,6 +21,29 @@ class QuizController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
 
+    public function getQuizById($id)
+    {
+        // Cari quiz berdasarkan ID
+        $quiz = Quiz::find($id);
+
+        if (!$quiz) {
+            return response()->json([
+                'message' => 'Quiz tidak ditemukan',
+            ], 404); // Status HTTP 404 Not Found
+        }
+
+        return $quiz;
+
+        // // Ambil daftar pertanyaan
+        // $daftarPertanyaan = $quiz->daftar_pertanyaan ?? [];
+
+        // return response()->json([
+        //     'id' => $quiz->id,
+        //     'nama' => $quiz->nama,
+        //     'daftar_pertanyaan' => $daftarPertanyaan,
+        // ], 200); // Status HTTP 200 OK
+    }
+
     public function buatKuis(Request $request)
     {
         // Validasi input
