@@ -1,7 +1,14 @@
 <?php
 
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\UsersController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
 // Rute untuk mendapatkan daftar pengguna (GET)
 Route::get('/users', [UsersController::class, 'index']);
@@ -18,8 +25,11 @@ Route::put('/users/{id}', [UsersController::class, 'update']);
 // Rute untuk menghapus pengguna (DELETE)
 Route::delete('/users/{id}', [UsersController::class, 'destroy']);
 
-// Grup rute dengan prefix 'v1' dan namespace controller yang benar
-Route::group(['prefix' => 'v1'], function () {
-    // Rute API resource untuk 'users' (menggunakan controller UsersController)
-    Route::apiResource('users', UsersController::class);
-});
+// Rute untuk Kuis
+Route::get('/kuis', [QuizController::class, 'index']);
+Route::get('/kuis/{id}', [QuizController::class, 'getQuizById']);
+
+Route::post('/kuis/buatKuis', [QuizController::class, 'buatKuis']);
+Route::put('/kuis/{id}/tambahPertanyaan', [QuizController::class, 'tambahPertanyaan']);
+Route::get('/kuis/{id}/pertanyaan', [QuizController::class, 'getPertanyaanByQuizId']);
+Route::delete('/kuis/hapusKuis/{id}', [QuizController::class, 'destroy']);
