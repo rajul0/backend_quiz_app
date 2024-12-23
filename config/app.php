@@ -52,6 +52,10 @@ return [
     |
     */
 
+    'providers' => [
+        Laravel\Passport\PassportServiceProvider::class,
+    ],
+
     'url' => env('APP_URL', 'http://localhost'),
 
     /*

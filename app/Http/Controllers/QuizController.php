@@ -124,6 +124,89 @@ class QuizController extends Controller
         ], 200); // Status HTTP 200 OK
     }
 
+    public function updateQuizTime(Request $request, $id)
+    {
+        // Validasi input
+        $validated = $request->validate([
+            'start_time' => 'required|date|after_or_equal:now',
+            'end_time' => 'required|date|after:start_time',
+        ]);
+
+        // Cari quiz berdasarkan ID
+        $quiz = Quiz::find($id);
+
+        if (!$quiz) {
+            return response()->json(['message' => 'Quiz not found'], 404);
+        }
+
+        // Update waktu mulai dan selesai
+        $quiz->update([
+            'start_time' => $validated['start_time'],
+            'end_time' => $validated['end_time'],
+        ]);
+
+        // Kembalikan respons dengan status "available"
+        return response()->json([
+            'message' => 'Quiz time updated successfully',
+            'quiz' => [
+                'id' => $quiz->id,
+                'nama' => $quiz->nama,
+                'start_time' => $quiz->start_time,
+                'end_time' => $quiz->end_time,
+                'available' => $quiz->available, // Ini menggunakan accessor otomatis
+            ],
+        ]);
+    }
+
+    public function deleteQuizTime($id)
+    {
+        // Cari kuis berdasarkan ID
+        $quiz = Quiz::find($id);
+
+        if (!$quiz) {
+            return response()->json(['message' => 'Quiz not found'], 404);
+        }
+
+        // Hapus waktu mulai dan selesai
+        $quiz->update([
+            'start_time' => null,
+            'end_time' => null,
+        ]);
+
+        // Kembalikan respons sukses
+        return response()->json([
+            'message' => 'Quiz time deleted successfully',
+            'quiz' => [
+                'id' => $quiz->id,
+                'nama' => $quiz->nama,
+                'start_time' => $quiz->start_time,
+                'end_time' => $quiz->end_time,
+            ],
+        ]);
+    }
+
+
+    /**
+     * Mendapatkan kuis yang available berdasarkan ID.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAvailableQuizById($id)
+    {
+        // Cek apakah kuis dengan ID tersebut tersedia
+        $quiz = Quiz::find($id)->available()->first();
+
+        if (!$quiz) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Kuis tidak tersedia atau tidak ditemukan',
+            ], 404);
+        }
+
+        return response()->json($quiz);
+    }
+
 
     public function destroy($id)
     {
